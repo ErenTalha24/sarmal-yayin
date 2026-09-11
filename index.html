@@ -78,7 +78,11 @@
 *{box-sizing:border-box}
 /* Sabit ust cubuk 70px; bolum baslari onun altinda kalmasin. */
 section[id], footer[id], div[id^="bb-"]{scroll-margin-top:86px}
-html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+/* Yumusak kaydirmayi JS yapiyor (asagida yumusakKaydir): tarayicinin
+   kendi smooth davranisinin suresi ve egrisi ayarlanamiyor, cok sert
+   duruyordu. html.js varken kapali, JS yoksa tarayiciya birakiliyor. */
+html{-webkit-text-size-adjust:100%}
+html:not(.js){scroll-behavior:smooth}
 body{
   margin:0; background:var(--zemin); color:var(--metin);
   font-family:var(--sans); font-size:17px; line-height:1.58; font-weight:400;
@@ -1554,6 +1558,70 @@ document.documentElement.classList.add('js');
   if (MARKA.instagram) bagla('ig-link', 'https://instagram.com/' + MARKA.instagram);
 })();
 
+/* ---- yumusak kaydirma ----
+   Tarayicinin scroll-behavior:smooth suresi ve egrisi ayarlanamiyor;
+   mesafe uzadikca sertlesiyor. Burada kendi egrimizi kullaniyoruz:
+   yavas baslar, ortada hizlanir, yavaslayarak durur (easeInOutCubic).
+   Sure mesafeye gore 620-1180ms arasinda oluyor. */
+const KAYDIR_PAY = 86;   /* sabit ust cubuk icin bosluk */
+
+function yumusakKaydir(hedef, bitince){
+  const azHareket = matchMedia('(prefers-reduced-motion: reduce)');
+  const bas  = window.pageYOffset;
+  const son  = Math.max(0, Math.min(
+    hedef.getBoundingClientRect().top + bas - KAYDIR_PAY,
+    document.documentElement.scrollHeight - innerHeight));
+  const yol  = son - bas;
+
+  if (azHareket.matches || Math.abs(yol) < 4){
+    window.scrollTo(0, son); bitince && bitince(); return;
+  }
+
+  /* mesafe uzadikca sure artar ama bir yerde durur */
+  const sure = Math.min(1180, Math.max(620, Math.abs(yol) * 0.55));
+  const egri = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  const basla = performance.now();
+  let iptal = false;
+
+  /* kullanici tekerlege veya parmagina davranirsa animasyon birakilir */
+  const birak = () => { iptal = true; temizle(); };
+  const temizle = () => {
+    removeEventListener('wheel', birak); removeEventListener('touchstart', birak);
+    removeEventListener('keydown', tusKontrol);
+  };
+  const tusKontrol = (e) => {
+    if (['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(e.key)) birak();
+  };
+  addEventListener('wheel', birak, {passive:true});
+  addEventListener('touchstart', birak, {passive:true});
+  addEventListener('keydown', tusKontrol);
+
+  const adim = (simdi) => {
+    if (iptal) return;
+    const t = Math.min(1, (simdi - basla) / sure);
+    window.scrollTo(0, bas + yol * egri(t));
+    if (t < 1) requestAnimationFrame(adim);
+    else { temizle(); bitince && bitince(); }
+  };
+  requestAnimationFrame(adim);
+}
+
+/* Sayfa ici tum capa baglantilari bu motordan gecer */
+document.addEventListener('click', (e) => {
+  const bag = e.target.closest('a[href^="#"]');
+  if (!bag) return;
+  const kimlik = bag.getAttribute('href');
+  if (!kimlik || kimlik === '#') return;
+  const hedef = document.querySelector(kimlik);
+  if (!hedef) return;
+
+  e.preventDefault();
+  yumusakKaydir(hedef, () => {
+    /* adres cubugu guncellensin ama ekstra zipla olmasin */
+    history.replaceState(null, '', kimlik);
+  });
+});
+
 /* üst çubuk: sayfa kaydırılınca zemin kazanır */
 const ust = document.getElementById('ust');
 const cubuk = () => ust.classList.toggle('yapisik', scrollY > 12);
@@ -2239,8 +2307,8 @@ document.querySelectorAll('.paket-sec').forEach(dugme => {
       const uygun = [...alan.options].find(o => o.textContent.trim() === secim);
       if (uygun) alan.value = uygun.value || uygun.textContent;
     }
-    document.getElementById('iletisim')?.scrollIntoView({behavior:'smooth', block:'start'});
-    setTimeout(() => document.querySelector('#a-isletme input')?.focus(), 600);
+    const hedef = document.getElementById('iletisim');
+    if (hedef) yumusakKaydir(hedef, () => document.querySelector('#a-isletme input')?.focus());
   });
 });
 
