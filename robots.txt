@@ -1,0 +1,4 @@
+# İletişim bilgileri tamamlanana kadar arama motorlarına kapalı.
+# E-posta ve Instagram girilince bu dosya silinecek.
+User-agent: *
+Disallow: /

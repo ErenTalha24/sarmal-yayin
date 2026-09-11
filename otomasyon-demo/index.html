@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Randevu Asistanı — Canlı Demo</title>
+<meta name="description" content="İşletmenizin WhatsApp hattına gelen mesajlara 7/24 otomatik cevap veren, randevuyu kendi kaydeden yapay zeka asistanı. Canlı demo.">
+
+<!-- Paylaşım önizlemesi. Bir alan adına yüklenince og:image ve og:url TAM adres olmalı,
+     yoksa WhatsApp ve LinkedIn görseli çekemez. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sarmal Dijital">
+<meta property="og:title" content="WhatsApp Randevu Asistanı — Canlı Demo">
+<meta property="og:description" content="Müşteri gibi yazın, cevap alın. Randevuyu kendi alıyor ve deftere kendi yazıyor. 7/24 çalışır.">
+<meta property="og:image" content="gorseller/og-kapak.jpg">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f14; --panel:#121820; --panel-2:#182029; --line:rgba(255,255,255,.09);
+  --txt:#eef3f7; --muted:#8fa0ad;
+  --wa:#25d366; --wa-dark:#128c7e; --wa-bg:#0b141a; --wa-in:#1f2c34; --wa-out:#005c4b;
+  --accent:#4ea3ff;
+  --r:16px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--txt);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.6; overflow-x:hidden;
+  background-image:radial-gradient(900px 500px at 12% -5%, rgba(37,211,102,.10), transparent 60%),
+                   radial-gradient(700px 500px at 92% 8%, rgba(78,163,255,.10), transparent 62%);
+}
+a{color:inherit; text-decoration:none}
+.wrap{width:min(100% - 36px, 1220px); margin-inline:auto}
+h1,h2{margin:0; letter-spacing:-.025em; line-height:1.1; font-weight:600}
+h1{font-size:clamp(2rem,4.4vw,3.1rem)}
+h2{font-size:clamp(1.5rem,2.6vw,2rem)}
+p{margin:0}
+.tag{
+  display:inline-flex; align-items:center; gap:9px; padding:7px 15px; border-radius:999px;
+  background:rgba(37,211,102,.12); border:1px solid rgba(37,211,102,.3); color:#7ee6a8;
+  font-size:.78rem; font-weight:600; letter-spacing:.02em;
+}
+.pulse{width:7px; height:7px; border-radius:50%; background:var(--wa); box-shadow:0 0 0 0 rgba(37,211,102,.7); animation:pl 2s infinite}
+body.arkada .pulse{animation-play-state:paused}
+@keyframes pl{70%{box-shadow:0 0 0 9px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+.muted{color:var(--muted)}
+
+header{padding:34px 0 8px}
+.top{display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap}
+.brandline{display:flex; align-items:center; gap:12px; font-weight:600}
+.logo-dot{width:36px; height:36px; border-radius:11px; background:linear-gradient(140deg,var(--wa),var(--wa-dark)); display:grid; place-items:center}
+
+.hero{padding:38px 0 26px; max-width:760px}
+.hero h1{margin:20px 0 16px}
+.hero p{color:var(--muted); font-size:1.06rem; max-width:62ch}
+
+.stage{display:grid; grid-template-columns:minmax(0,380px) minmax(0,1fr); gap:34px; align-items:start; padding-bottom:60px}
+
+/* telefon */
+.phone{
+  border-radius:38px; padding:11px; background:linear-gradient(160deg,#1b242e,#0d1319);
+  box-shadow:0 40px 90px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.07);
+  position:sticky; top:24px;
+}
+.screen{border-radius:29px; overflow:hidden; background:var(--wa-bg); display:flex; flex-direction:column; height:660px}
+.wa-top{background:#1f2c34; padding:12px 14px; display:flex; align-items:center; gap:12px; border-bottom:1px solid rgba(255,255,255,.06)}
+.wa-av{width:38px; height:38px; border-radius:50%; background:linear-gradient(140deg,#2f9e8f,#0f5c4f); display:grid; place-items:center; font-size:.8rem; font-weight:700; color:#fff}
+.wa-top b{display:block; font-size:.92rem; font-weight:600; line-height:1.2}
+.wa-top small{color:#8fa0ad; font-size:.72rem}
+.wa-body{
+  flex:1; overflow-y:auto; padding:16px 12px; display:flex; flex-direction:column; gap:8px;
+  background-color:var(--wa-bg);
+  background-image:radial-gradient(rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size:22px 22px;
+  scrollbar-width:thin;
+}
+.msg{max-width:82%; padding:8px 11px 6px; border-radius:9px; font-size:.88rem; line-height:1.45; position:relative; white-space:pre-line; animation:pop .28s cubic-bezier(.2,.8,.3,1)}
+@keyframes pop{from{opacity:0; transform:translateY(8px) scale(.97)}}
+.msg.in{background:var(--wa-in); align-self:flex-start; border-top-left-radius:2px}
+.msg.out{background:var(--wa-out); align-self:flex-end; border-top-right-radius:2px}
+.msg time{display:block; text-align:right; font-size:.62rem; color:rgba(255,255,255,.45); margin-top:3px}
+.msg.out time::after{content:" ✓✓"; color:#7fd8ff}
+.typing{align-self:flex-start; background:var(--wa-in); border-radius:9px; padding:11px 14px; display:none; gap:4px}
+.typing.show{display:flex}
+.typing i{width:6px; height:6px; border-radius:50%; background:#8fa0ad; animation:bl 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s} .typing i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,60%,100%{opacity:.3; transform:translateY(0)}30%{opacity:1; transform:translateY(-3px)}}
+.chips{display:flex; gap:7px; padding:9px 12px 0; flex-wrap:wrap; background:var(--wa-bg)}
+.chip{
+  border:1px solid rgba(37,211,102,.4); background:rgba(37,211,102,.1); color:#8fe9b3;
+  border-radius:999px; padding:6px 13px; font-size:.75rem; cursor:pointer; font-family:inherit;
+  transition:background .2s, transform .2s;
+}
+.chip:hover{background:rgba(37,211,102,.22); transform:translateY(-1px)}
+.wa-input{display:flex; gap:8px; padding:10px 12px 14px; background:var(--wa-bg); align-items:center}
+.wa-input input{
+  flex:1; min-width:0; background:#1f2c34; border:0; border-radius:999px; padding:11px 16px;
+  color:var(--txt); font:inherit; font-size:.87rem;
+}
+.wa-input input:focus{outline:1px solid rgba(37,211,102,.5)}
+.send{
+  width:42px; height:42px; flex:none; border-radius:50%; border:0; background:var(--wa);
+  display:grid; place-items:center; cursor:pointer; transition:transform .2s, background .2s;
+}
+.send:hover{transform:scale(1.06); background:#1fbf5c}
+
+/* Gomulu mod: bu sayfa baska bir sitenin icinde cerceve olarak
+   acildiginda yalniz telefon ve defter gorunur. Adres satirina
+   ?gomulu=1 eklenmedigi surece hicbir sey degismez. */
+body.gomulu{background:transparent}
+body.gomulu [data-gomulude="gizle"]{display:none !important}
+body.gomulu .stage{margin:0}
+body.gomulu .wrap{width:100%}
+
+/* sağ panel */
+.right{display:grid; gap:22px}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:var(--r); padding:24px}
+.card h2{margin-bottom:6px}
+.card > p.muted{font-size:.92rem}
+.metrics{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:20px}
+.metric{background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:16px}
+.metric b{display:block; font-size:1.9rem; font-weight:600; letter-spacing:-.03em; line-height:1}
+.metric span{font-size:.76rem; color:var(--muted); display:block; margin-top:6px}
+.metric.green b{color:#5fe39a}
+.metric.blue b{color:var(--accent)}
+
+.sheet{width:100%; border-collapse:collapse; margin-top:18px; font-size:.87rem}
+.sheet th{
+  text-align:left; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+  font-weight:600; padding:0 12px 10px; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+.sheet td{padding:13px 12px; border-bottom:1px solid rgba(255,255,255,.05); vertical-align:top}
+.sheet tr.fresh td{animation:hi 1.6s ease-out}
+@keyframes hi{from{background:rgba(37,211,102,.22)}}
+.sheet .who{font-weight:600}
+.sheet .sub{color:var(--muted); font-size:.78rem; display:block}
+.badge{display:inline-block; padding:3px 10px; border-radius:999px; font-size:.72rem; font-weight:600; white-space:nowrap}
+.badge.ok{background:rgba(37,211,102,.14); color:#5fe39a}
+.badge.wait{background:rgba(255,193,71,.14); color:#ffc147}
+.empty{padding:26px 12px; text-align:center; color:var(--muted); font-size:.9rem}
+.table-scroll{overflow-x:auto; margin:0 -4px}
+
+.how{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+.how-item{background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:20px}
+.how-item .n{width:28px; height:28px; border-radius:8px; background:rgba(78,163,255,.16); color:var(--accent); display:grid; place-items:center; font-size:.8rem; font-weight:700; margin-bottom:12px}
+.how-item b{display:block; font-size:.95rem; margin-bottom:5px}
+.how-item p{font-size:.84rem; color:var(--muted); line-height:1.5}
+
+.actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+.btn{
+  display:inline-flex; align-items:center; gap:9px; padding:13px 22px; border-radius:11px;
+  font-size:.9rem; font-weight:600; cursor:pointer; border:1px solid transparent; font-family:inherit;
+  transition:transform .2s, background .2s, border-color .2s;
+}
+.btn-main{background:var(--wa); color:#062012}
+.btn-main:hover{background:#33e07a; transform:translateY(-2px)}
+.btn-line{background:transparent; color:var(--txt); border-color:var(--line)}
+.btn-line:hover{border-color:rgba(255,255,255,.28); transform:translateY(-2px)}
+
+.note{
+  margin-top:14px; font-size:.8rem; color:var(--muted); background:var(--panel-2);
+  border:1px solid var(--line); border-left:2px solid var(--accent); border-radius:8px; padding:14px 16px;
+}
+footer.site{border-top:1px solid var(--line); padding:30px 0 44px; color:var(--muted); font-size:.82rem; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+
+@media (max-width:960px){
+  .stage{grid-template-columns:minmax(0,1fr); gap:26px}
+  .phone{position:static; max-width:400px; margin-inline:auto}
+  .how{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .metrics{grid-template-columns:minmax(0,1fr)}
+  .screen{height:560px}
+  .card{padding:20px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+
+<header data-gomulude="gizle">
+  <div class="wrap top">
+    <div class="brandline">
+      <span class="logo-dot"><svg width="19" height="19" viewBox="0 0 24 24" fill="#062012"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 2.9 4.6 4 .6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 21.5c-1.7 0-3.3-.4-4.7-1.3l-.3-.2-3.5.9.9-3.4-.2-.4c-.9-1.5-1.4-3.2-1.4-4.9C2.8 7.1 6.9 3 12 3s9.2 4.1 9.2 9.2-4.1 9.3-9.2 9.3M12 1C5.9 1 .9 6 .9 12.1c0 2 .5 3.9 1.5 5.6L.8 23.2l5.7-1.5c1.6.9 3.5 1.4 5.5 1.4 6.1 0 11.1-5 11.1-11.1S18.1 1 12 1"/></svg></span>
+      Randevu Asistanı
+    </div>
+    <span class="tag"><span class="pulse"></span> Canlı demo · gerçekten cevap veriyor</span>
+  </div>
+</header>
+
+<div class="wrap hero" data-gomulude="gizle">
+  <h1>İşletmenizin WhatsApp'ı, siz uyurken de cevap versin.</h1>
+  <p>Soldaki telefona müşteri gibi yazın. Asistan fiyatı söyler, uygun saati verir, randevuyu alır ve sağdaki deftere kendi kaydeder. Kimse başında beklemiyor.</p>
+</div>
+
+<div class="wrap stage">
+
+  <!-- TELEFON -->
+  <div class="phone">
+    <div class="screen">
+      <div class="wa-top">
+        <span class="wa-av" id="waAv">MD</span>
+        <div style="flex:1; min-width:0">
+          <b id="waAd">Meridyen Diş Kliniği</b>
+          <small id="durum">çevrimiçi</small>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8fa0ad" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+      </div>
+
+      <div class="wa-body" id="chat">
+        <div class="typing" id="typing"><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="chips" id="chips"></div>
+
+      <form class="wa-input" id="chatForm">
+        <input id="chatInput" type="text" placeholder="Mesaj yazın" autocomplete="off">
+        <button class="send" type="submit" aria-label="Gönder">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#062012"><path d="M2.3 20.3 21.7 12 2.3 3.7 2.3 10l13 2-13 2z"/></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SAĞ PANEL -->
+  <div class="right">
+    <div class="card">
+      <h2>Randevu defteri</h2>
+      <p class="muted">Konuşma bitince kayıt buraya kendi düşer. Excel, Google Tablolar ya da kullandığınız randevu programı olabilir.</p>
+      <div class="metrics">
+        <div class="metric green"><b id="mRandevu">0</b><span>oluşan randevu</span></div>
+        <div class="metric"><b id="mMesaj">0</b><span>cevaplanan mesaj</span></div>
+        <div class="metric blue"><b id="mSure">0 dk</b><span>kazanılan zaman</span></div>
+      </div>
+      <div class="table-scroll">
+        <table class="sheet">
+          <thead><tr><th>Müşteri</th><th>İşlem</th><th>Gün / Saat</th><th>Durum</th></tr></thead>
+          <tbody id="defter">
+            <tr id="bosSatir"><td colspan="4"><div class="empty">Henüz kayıt yok. Telefondan "randevu almak istiyorum" yazın.</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="actions">
+        <button class="btn btn-main" id="oynat">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg>
+          Örnek konuşmayı oynat
+        </button>
+        <button class="btn btn-line" id="sifirla">Baştan başlat</button>
+      </div>
+    </div>
+
+    <div class="card" data-gomulude="gizle">
+      <h2>Bu ne işe yarıyor</h2>
+      <p class="muted">Küçük bir işletmenin en çok müşteri kaybettiği yer, cevaplanmayan mesajdır.</p>
+      <div class="how" style="margin-top:20px">
+        <div class="how-item">
+          <div class="n">1</div>
+          <b>Gece gelen mesaj kaybolmuyor</b>
+          <p>Mesajların önemli kısmı mesai dışında geliyor. Sabah cevap veren işletme, o müşteriyi çoktan kaybetmiş oluyor.</p>
+        </div>
+        <div class="how-item">
+          <div class="n">2</div>
+          <b>Aynı soruya 40 kez cevap yok</b>
+          <p>Fiyat, adres, çalışma saati, park yeri. Bu soruların hepsi asistanda hazır duruyor.</p>
+        </div>
+        <div class="how-item">
+          <div class="n">3</div>
+          <b>Randevu deftere kendi yazılıyor</b>
+          <p>Kimse not almayı unutmuyor, çift randevu verilmiyor, hasta ismi yanlış yazılmıyor.</p>
+        </div>
+      </div>
+      <div class="note">
+        Bu sayfa bir tanıtım demosudur. Klinik, fiyat ve kişi bilgileri gerçek değildir. Kurulumda asistan sizin gerçek WhatsApp işletme hattınıza bağlanır, cevaplar sizin fiyat listenize ve çalışma saatlerinize göre yazılır.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site" data-gomulude="gizle">
+  <div class="wrap" style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; width:min(100% - 36px,1220px)">
+    <span>WhatsApp Randevu Asistanı · tanıtım demosu</span>
+    <span>Gerçek kurulumda mesajlar sizin hattınızdan gider.</span>
+  </div>
+</footer>
+
+<script>
+/* ===================== TOPLANTI ÖNCESİ BURAYI DEĞİŞTİR =====================
+   Aşağıdaki altı satırı müşterinin kendi bilgileriyle değiştirin, demo
+   onun işletmesi olur. Başka hiçbir yere dokunmanız gerekmez.
+   Telefon 0212 999 aralığı İstanbul'da tahsis edilmiyor, kimse aranmaz.
+   Adresi de müşterinin gerçek adresiyle değiştirin.                         */
+const KLINIK = {
+  ad:        'Meridyen Diş Kliniği',
+  kisaltma:  'MD',
+  adres:     'Teşvikiye Caddesi No: 41, Şişli',
+  yolTarifi: 'Nişantaşı metro çıkışına yürüyerek 4 dakika',
+  telefon:   '0212 999 84 20',
+  cocukHekimi: 'Dt. Ece Arslan',
+};
+/* =================== DEĞİŞTİRİLECEK KISIM BURADA BİTTİ =================== */
+
+/* Türkçe harfleri sadeleştirir. Müşteri WhatsApp'ta "agrim var" yazar,
+   "ağrım var" yazmaz. İkisi de aynı yere düşsün diye karşılaştırma
+   her zaman sadeleştirilmiş metin üzerinden yapılır. */
+function sadelestir(metin){
+  return String(metin)
+    .toLocaleLowerCase('tr')
+    .replace(/ş/g,'s').replace(/ç/g,'c').replace(/ğ/g,'g')
+    .replace(/ü/g,'u').replace(/ö/g,'o').replace(/ı/g,'i')
+    .replace(/î/g,'i').replace(/â/g,'a').replace(/û/g,'u')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+document.documentElement.lang = 'tr';
+if (new URLSearchParams(location.search).get('gomulu') === '1'){
+  document.body.classList.add('gomulu');
+}
+// sekme arkadayken nabiz animasyonu dursun
+document.addEventListener('visibilitychange', () => document.body.classList.toggle('arkada', document.hidden));
+
+const chat = document.getElementById('chat');
+const typing = document.getElementById('typing');
+const chipsBox = document.getElementById('chips');
+const defter = document.getElementById('defter');
+const durum = document.getElementById('durum');
+
+let sayacMesaj = 0, sayacRandevu = 0;
+let akis = null;            // devam eden randevu akışı
+let taslak = {};
+let sonKonu = null;         // müşteri hangi tedaviden bahsetti, asistan hatırlasın
+
+const saat = () => {
+  const d = new Date();
+  return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+};
+
+function ekle(metin, yon){
+  const el = document.createElement('div');
+  el.className = 'msg ' + yon;
+  el.innerHTML = metin.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '<time>' + saat() + '</time>';
+  chat.insertBefore(el, typing);
+  chat.scrollTop = chat.scrollHeight;
+  if (yon === 'in') { sayacMesaj++; guncelleSayac(); }
+}
+
+function guncelleSayac(){
+  document.getElementById('mMesaj').textContent = sayacMesaj;
+  document.getElementById('mRandevu').textContent = sayacRandevu;
+  document.getElementById('mSure').textContent = (sayacMesaj * 3 + sayacRandevu * 5) + ' dk';
+}
+
+function yazi(sure = 900){
+  return new Promise(res => {
+    typing.classList.add('show');
+    durum.textContent = 'yazıyor...';
+    chat.scrollTop = chat.scrollHeight;
+    setTimeout(() => { typing.classList.remove('show'); durum.textContent = 'çevrimiçi'; res(); }, sure);
+  });
+}
+
+async function cevapla(metinler){
+  for (const ham of metinler){
+    const m = (typeof ham === 'function') ? ham() : ham;
+    await yazi(Math.min(1500, 420 + m.length * 11));
+    ekle(m, 'in');
+  }
+}
+
+function chipler(liste){
+  chipsBox.innerHTML = '';
+  liste.forEach(t => {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.type = 'button'; b.textContent = t;
+    b.addEventListener('click', () => gonder(t));
+    chipsBox.appendChild(b);
+  });
+}
+
+function deftereYaz(kayit){
+  const bos = document.getElementById('bosSatir');
+  if (bos) bos.remove();
+  const tr = document.createElement('tr');
+  tr.className = 'fresh';
+  tr.innerHTML =
+    '<td><span class="who">' + kayit.ad + '</span><span class="sub">WhatsApp üzerinden</span></td>' +
+    '<td>' + kayit.islem + '</td>' +
+    '<td>' + kayit.gun + '<span class="sub">' + kayit.saat + '</span></td>' +
+    '<td><span class="badge ' + (kayit.onay ? 'ok' : 'wait') + '">' + (kayit.onay ? 'onaylandı' : 'beklemede') + '</span></td>';
+  defter.appendChild(tr);
+  sayacRandevu++; guncelleSayac();
+}
+
+/* ---- asistanın bilgisi ---- */
+const bilgi = [
+  /* SIRA ÖNEMLİ: dizi baştan taranır, ilk eşleşen kazanır.
+     Bu yüzden dar sorular (süre) geniş olanlardan (fiyat, saat) önce durur.
+     Anahtarlar sadeleştirilmiş yazılır, Türkçe harf kullanılmaz. */
+
+  { anahtar:['surer','kac seans','ne zaman biter','islem suresi','kac randevu','kac hafta'],
+    cevap:['Tedavi süresi işleme göre değişiyor:\n• Dolgu: tek seans, 30-40 dakika\n• Kanal tedavisi: çoğunlukla tek seans, 60-90 dakika\n• Diş taşı temizliği: 30 dakika\n• İmplant: cerrahi 45 dakika, iyileşmeyle birlikte 3-6 ay\n• Zirkonyum kaplama: 2 seans, aralarında bir hafta',
+           'Kesin süre ilk muayenede hekimimiz tarafından gün olarak veriliyor.'] },
+
+  { anahtar:['fiyat','ucret','ne kadar','kac para','tutar','para','pahali','indirim'],
+    cevap:['Fiyatlarımız işleme göre değişiyor. En sık sorulanlar:\n• Muayene ve röntgen: ücretsiz\n• Dolgu: 1.800 ₺\n• Kanal tedavisi: 4.500 ₺\n• İmplant: 22.000 ₺ (implant + üst yapı)\n• Zirkonyum kaplama: 6.500 ₺',
+           'Kesin fiyat muayeneden sonra yazılı olarak veriliyor, aradaki farkı önceden söylüyoruz. Randevu oluşturmamı ister misiniz?'] },
+
+  { anahtar:['adres','nerede','konum','yol tarifi','nasil gel','otopark','park yeri','park','vale','araba','ulasim','metro','yakin'],
+    cevap:[() => KLINIK.adres + '. ' + KLINIK.yolTarifi + '.\nBinanın altında ücretsiz vale hizmetimiz var, aracınızı kapıda bırakabilirsiniz.'] },
+
+  { anahtar:['saat','acik','kacta','kapani','calisma','cumartesi','pazar','hafta sonu','mesai','aksam'],
+    cevap:['Çalışma saatlerimiz:\n• Hafta içi 09.00 - 19.00\n• Cumartesi 10.00 - 17.00\n• Pazar kapalı\nAcil durumlar için 7/24 nöbetçi hekimimiz var.'] },
+
+  { anahtar:['agri','aciyor','agriyor','sislik','kiril','apse','zonklu','dayanamiyorum','acil'],
+    cevap:['Geçmiş olsun. Ağrılı hastalarımıza aynı gün içinde yer açıyoruz.',
+           'Ağrı kesici aldıysanız etkisi geçmeden gelmeniz daha rahat olur. Bugün için 14.30 ve 17.00 boş. Hangisini ayırayım?'] },
+
+  { anahtar:['implant'],
+    cevap:['İmplant tedavimiz 22.000 ₺, bu fiyata implant, üst yapı ve tüm kontroller dahildir.\nİşlem 45 dakika sürüyor, aynı gün evinize dönüyorsunuz. İyileşme 3 ile 6 ay arasında tamamlanıyor.'] },
+
+  { anahtar:['dis tasi','tartar','temizli','dis temizli','plak temizli'],
+    cevap:['Diş taşı temizliği 1.200 ₺, işlem 30 dakika sürüyor ve aynı seansta bitiyor.',
+           'Yılda bir kez yapılması öneriliyor. Sonrasında birkaç gün hassasiyet olabilir, geçicidir. Randevu oluşturmamı ister misiniz?'] },
+
+  { anahtar:['gulus','zirkon','kaplama','lamina','beyazlat','estetik','porselen','gulumseme'],
+    cevap:['Estetik tarafında en çok tercih edilenler:\n• Diş beyazlatma: 5.000 ₺, tek seans\n• Zirkonyum kaplama: 6.500 ₺ (diş başı)\n• Porselen lamina: 8.500 ₺ (diş başı)',
+           'Estetik planlamada önce dijital tasarım yapıyoruz, sonucu tedaviye başlamadan ekranda görüyorsunuz. Ücretsiz danışma randevusu ayarlayabilirim.'] },
+
+  { anahtar:['ortodonti','dis teli','braket','seffaf plak','tel tedavi','egri dis','carpik dis'],
+    cevap:['Ortodonti tarafında hem metal braket hem şeffaf plak seçeneğimiz var.\nŞeffaf plak dışarıdan belli olmuyor, yemek yerken çıkarılabiliyor.',
+           'Tedavi süresi vakaya göre 8 ay ile 24 ay arasında değişiyor. Kesin süre ilk muayenede röntgenle belirleniyor.'] },
+
+  { anahtar:['cocuk','oglum','kizim','bebek','yasinda','sut disi'],
+    cevap:[() => 'Çocuk diş hekimimiz ' + KLINIK.cocukHekimi + ' salı ve perşembe günleri klinikte oluyor.\nİlk ziyaret tanışma seansı olarak geçiyor ve ücret alınmıyor, çocuk kliniğe alışsın diye.'] },
+
+  { anahtar:['sgk','ssk','bagkur','bag kur','sigorta','police','tamamlayici','anlasmali','devlet'],
+    cevap:['SGK ağız ve diş sağlığı hizmetlerinin bir bölümünü karşılıyor, kapsam işleme göre değişiyor.\nTamamlayıcı sağlık sigortalarının büyük bölümüyle de anlaşmamız var.',
+           'Poliçe numaranızı gönderirseniz kapsamınızı sizin adınıza kontrol edip dönüş yapıyoruz.'] },
+
+  { anahtar:['taksit','kredi','odeme','nakit','havale','senet'],
+    cevap:['Kredi kartına 9 taksit ve kliniğe özel senetli ödeme seçeneğimiz var.\nTedavi planıyla birlikte ödeme planını da yazılı veriyoruz.'] },
+
+  { anahtar:['iptal','erteleme','degistir','erteleyebilir','gelemeyecegim','gelemiyorum'],
+    cevap:['Tabii, randevunuzu değiştirebiliriz. Adınızı yazarsanız kaydınızı bulup yeni saat önereyim.'] },
+
+  { anahtar:['tesekkur','sagol','eyvallah','tamam','anladim','tamamdir'],
+    cevap:['Rica ederiz. Başka bir sorunuz olursa buradayız, iyi günler dileriz.'] },
+
+  { anahtar:['merhaba','selam','iyi gunler','kolay gelsin','gunaydin','iyi aksamlar','alo'],
+    cevap:[() => 'Merhaba, ' + KLINIK.ad + '. Size nasıl yardımcı olabilirim?'] },
+];
+
+const GUNLER = ['yarın','perşembe','cuma','cumartesi','pazartesi','salı','çarşamba','bugün'];
+const SAATLER = ['10.00','11.30','14.30','16.00','17.30'];
+
+/* t sadeleştirilmiş metindir */
+function konuBul(t){
+  if (/implant/.test(t)) return 'İmplant görüşmesi';
+  if (/dolgu/.test(t)) return 'Dolgu';
+  if (/kanal/.test(t)) return 'Kanal tedavisi';
+  if (/beyazlat|estetik|kaplama|zirkon|gulus|lamina|porselen/.test(t)) return 'Estetik danışma';
+  if (/temizli|tartar|dis tasi/.test(t)) return 'Diş taşı temizliği';
+  if (/cocuk|oglum|kizim|sut disi/.test(t)) return 'Çocuk muayenesi';
+  if (/ortodonti|dis teli|braket|seffaf plak|carpik dis/.test(t)) return 'Ortodonti danışma';
+  if (/agri|aciyor|agriyor|sislik|kiril|apse/.test(t)) return 'Acil muayene';
+  return null;
+}
+
+async function yanitla(metin){
+  const t = sadelestir(metin);
+  const bulunan = konuBul(t);
+  if (bulunan && !akis) sonKonu = bulunan;   // konuyu akılda tut
+
+  /* randevu akışı sürüyorsa */
+  if (akis === 'gun'){
+    taslak.gun = metin.trim();
+    akis = 'saat';
+    await cevapla([taslak.gun + ' için şu saatler boş: ' + SAATLER.join(' · ') + '\nHangisi size uyar?']);
+    chipler(SAATLER);
+    return;
+  }
+  if (akis === 'saat'){
+    taslak.saat = metin.trim();
+    akis = 'ad';
+    await cevapla(['Son olarak randevuyu kimin adına yazayım?']);
+    chipler([]);
+    return;
+  }
+  if (akis === 'ad'){
+    taslak.ad = metin.trim();
+    akis = null;
+    await cevapla([
+      'Randevunuz oluşturuldu ' + taslak.ad + '.\n\n📅 ' + taslak.gun + ' · ' + taslak.saat + '\n🦷 ' + taslak.islem + '\n📍 ' + KLINIK.adres,
+      'Randevunuzdan 1 gün önce hatırlatma mesajı göndereceğim. Değişiklik gerekirse buraya yazmanız yeterli.'
+    ]);
+    deftereYaz({ ad: taslak.ad, islem: taslak.islem, gun: taslak.gun, saat: taslak.saat, onay: true });
+    chipler(['Teşekkürler', 'Adresi tekrar gönderir misin']);
+    return;
+  }
+
+  /* randevu başlatma
+     "randevumu iptal edeyim" cümlesi de 'randevu' içeriyor. Yeni akış
+     başlatmadan önce iptal/erteleme niyetini ayıklıyoruz. */
+  const iptalNiyeti = /iptal|erteleme|erteleyebilir|degistir|gelemeyecegim|gelemiyorum/.test(t);
+  if (!iptalNiyeti && /randevu|gorusme|gelmek istiyorum|yer var mi|musait|bos yer|ne zaman gelebilir|uygun mu|siraya/.test(t)){
+    taslak = { islem: bulunan || sonKonu || 'Genel muayene' };
+    akis = 'gun';
+    await cevapla(['Elbette, hemen bakıyorum. ' + taslak.islem + ' için hangi gün gelmek istersiniz?']);
+    chipler(['Yarın','Cuma','Cumartesi']);
+    return;
+  }
+
+  /* bilinen sorular */
+  for (const b of bilgi){
+    if (b.anahtar.some(a => t.includes(a))){
+      await cevapla(b.cevap);
+      chipler(['Randevu almak istiyorum','Fiyatlar nedir','Adresiniz nerede']);
+      return;
+    }
+  }
+
+  /* bilinmeyen soru */
+  await cevapla([
+    'Bunu tam anlayamadım, yanlış bilgi vermek istemem.',
+    'Sorunuzu klinik sorumlusuna ilettim, mesai içinde size dönüş yapacak. Bu arada fiyat listesi, adres ve randevu konusunda ben yardımcı olabilirim.'
+  ]);
+  chipler(['Randevu almak istiyorum','Fiyatlar nedir','Çalışma saatleri']);
+}
+
+async function gonder(metin){
+  if (!metin.trim()) return;
+  ekle(metin, 'out');
+  chipsBox.innerHTML = '';
+  await yanitla(metin);
+}
+
+document.getElementById('chatForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const i = document.getElementById('chatInput');
+  const v = i.value; i.value = '';
+  gonder(v);
+});
+
+/* örnek konuşma */
+const senaryo = ['Merhaba, implant fiyatı ne kadar?','Randevu almak istiyorum','Cuma','16.00','Ayşe Yılmaz'];
+let oynuyor = false;
+document.getElementById('oynat').addEventListener('click', async () => {
+  if (oynuyor) return;
+  oynuyor = true;
+  sifirlaEkran();
+  await new Promise(r => setTimeout(r, 500));
+  for (const s of senaryo){
+    await gonder(s);
+    await new Promise(r => setTimeout(r, 750));
+  }
+  oynuyor = false;
+});
+
+function sifirlaEkran(){
+  [...chat.querySelectorAll('.msg')].forEach(e => e.remove());
+  akis = null; taslak = {}; sonKonu = null;
+  chipler(['Fiyatlar nedir','Randevu almak istiyorum','Çalışma saatleri']);
+}
+
+document.getElementById('sifirla').addEventListener('click', () => {
+  sifirlaEkran();
+  defter.innerHTML = '<tr id="bosSatir"><td colspan="4"><div class="empty">Henüz kayıt yok. Telefondan "randevu almak istiyorum" yazın.</div></td></tr>';
+  sayacMesaj = 0; sayacRandevu = 0; guncelleSayac();
+  baslat();
+});
+
+/* Ayar bloğundaki bilgileri ekrana yaz. Tek yerden değiştirilsin diye. */
+function ayarlariUygula(){
+  document.getElementById('waAd').textContent = KLINIK.ad;
+  document.getElementById('waAv').textContent = KLINIK.kisaltma;
+}
+ayarlariUygula();
+
+async function baslat(){
+  await new Promise(r => setTimeout(r, 400));
+  await cevapla([() => 'Merhaba, ' + KLINIK.ad + ' randevu asistanıyım. Fiyat, randevu ve çalışma saatleri hakkında 7/24 yardımcı olabilirim.']);
+  chipler(['Fiyatlar nedir','Randevu almak istiyorum','Çalışma saatleri']);
+}
+baslat();
+</script>
+</body>
+</html>

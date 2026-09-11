@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atelier Nuar — Güzellik ve Bakım Salonu</title>
+<meta name="description" content="Atelier Nuar güzellik salonu. Cilt bakımı, kalıcı makyaj, lazer epilasyon, tırnak ve kirpik tasarımı. Online randevu.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23241c18%27%2F%3E%3Ctext%20x%3D%2716%27%20y%3D%2722%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2717%27%20font-style%3D%27italic%27%20fill%3D%27%23e7cfc4%27%20text-anchor%3D%27middle%27%3EN%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23241c18%27%2F%3E%3Ctext%20x%3D%2716%27%20y%3D%2722%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2717%27%20font-style%3D%27italic%27%20fill%3D%27%23e7cfc4%27%20text-anchor%3D%27middle%27%3EN%3C%2Ftext%3E%3C%2Fsvg%3E">
+<meta name="theme-color" content="#241c18">
+
+<!-- Link önizlemesi. Bir alan adına yüklerken og:image TAM adres olmalı. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Atelier Nuar">
+<meta property="og:title" content="Atelier Nuar — Güzellik ve Bakım Salonu">
+<meta property="og:description" content="Bebek'te cilt bakımı, kalıcı makyaj, lazer epilasyon ve tırnak tasarımı. Randevunuza özel ayrılmış kabin.">
+<meta property="og:image" content="gorseller/og-kapak.jpg">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f8f3ee; --paper:#fffdfb; --sand:#efe4da; --blush:#e7cfc4;
+  --espresso:#241c18; --coffee:#3d302a; --muted:#7b6a61;
+  --bronze:#a9754a; --bronze-dark:#8a5c37;
+  --line:rgba(36,28,24,.12);
+  --shadow:0 2px 8px rgba(36,28,24,.05), 0 22px 50px rgba(36,28,24,.09);
+  --r:4px; --w:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--cream); color:var(--espresso);
+  font-family:Jost,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:300; font-size:17px; line-height:1.7; overflow-x:hidden;
+}
+a{color:inherit; text-decoration:none}
+p{margin:0}
+h1,h2,h3,h4{margin:0; font-weight:400}
+h1,h2,.display{font-family:"Cormorant Garamond",Georgia,serif; font-weight:300; line-height:1.05; letter-spacing:-.015em}
+h1{font-size:clamp(3rem,8.5vw,6.2rem)}
+h2{font-size:clamp(2.3rem,5.2vw,4rem)}
+h3{font-family:Jost,sans-serif; font-weight:500; font-size:1.05rem; letter-spacing:.01em}
+.wrap{width:min(100% - 40px, var(--w)); margin-inline:auto}
+.kicker{
+  font-size:.7rem; letter-spacing:.34em; text-transform:uppercase; font-weight:500; color:var(--bronze);
+}
+.lead{color:var(--muted); max-width:52ch; font-size:1.05rem}
+.rule{height:1px; background:var(--line); border:0; margin:0}
+
+.btn{
+  display:inline-flex; align-items:center; gap:12px; padding:16px 32px; border-radius:999px;
+  font-size:.78rem; letter-spacing:.2em; text-transform:uppercase; font-weight:500; cursor:pointer;
+  border:1px solid var(--espresso); background:var(--espresso); color:var(--cream);
+  transition:background .3s, color .3s, transform .3s, border-color .3s;
+}
+.btn:hover{background:transparent; color:var(--espresso); transform:translateY(-2px)}
+.btn-outline{background:transparent; color:var(--espresso)}
+.btn-outline:hover{background:var(--espresso); color:var(--cream)}
+.btn-light{border-color:var(--cream); background:var(--cream); color:var(--espresso)}
+.btn-light:hover{background:transparent; color:var(--cream)}
+
+/* header */
+header{position:sticky; top:0; z-index:60; background:rgba(248,243,238,.9); backdrop-filter:blur(12px) saturate(160%); transition:box-shadow .3s}
+header.stuck{box-shadow:0 1px 0 var(--line)}
+.nav{display:flex; align-items:center; justify-content:space-between; height:84px; gap:30px}
+.logo{font-family:"Cormorant Garamond",serif; font-size:1.6rem; letter-spacing:.24em; text-transform:uppercase; line-height:1}
+.logo small{display:block; font-family:Jost,sans-serif; font-size:.54rem; letter-spacing:.42em; color:var(--muted); margin-top:5px}
+.nav-links{display:flex; gap:36px; font-size:.76rem; letter-spacing:.18em; text-transform:uppercase; font-weight:400}
+.nav-links a{position:relative; padding:4px 0; color:var(--coffee)}
+.nav-links a::after{content:""; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--bronze); transition:width .35s}
+.nav-links a:hover::after{width:100%}
+.nav-right{display:flex; align-items:center; gap:16px}
+.burger{display:none; width:46px; height:46px; border:1px solid var(--line); border-radius:50%; background:transparent; cursor:pointer; align-items:center; justify-content:center}
+.burger div{width:16px; height:1px; background:var(--espresso); position:relative}
+.burger div::before,.burger div::after{content:""; position:absolute; left:0; width:16px; height:1px; background:var(--espresso)}
+.burger div::before{top:-5px} .burger div::after{top:5px}
+.mobile-menu{display:none; padding-bottom:26px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block; padding:16px 0; border-top:1px solid var(--line); font-size:.82rem; letter-spacing:.2em; text-transform:uppercase}
+.mobile-menu .btn{width:100%; justify-content:center; margin-top:20px}
+
+/* hero */
+.hero{padding:64px 0 0; position:relative}
+.hero-top{display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr); gap:50px; align-items:end}
+.hero h1 em{font-style:italic; color:var(--bronze)}
+.hero-meta{display:flex; flex-direction:column; gap:22px; padding-bottom:14px}
+.hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-top:8px}
+.hero-band{
+  margin-top:60px; height:340px; border-radius:2px; position:relative; overflow:hidden;
+  background:
+    radial-gradient(120% 140% at 15% 10%, rgba(233,208,196,.95), rgba(233,208,196,0) 55%),
+    radial-gradient(110% 130% at 85% 90%, rgba(169,117,74,.55), rgba(169,117,74,0) 60%),
+    linear-gradient(120deg,#3d302a,#241c18 55%,#4a382f);
+  display:grid; place-items:center; text-align:center; color:var(--cream); padding:30px;
+}
+.hero-band::after{
+  content:""; position:absolute; inset:16px; border:1px solid rgba(248,243,238,.28); pointer-events:none;
+}
+.hero-band .display{font-size:clamp(1.7rem,3.6vw,2.9rem); font-style:italic; max-width:22ch; line-height:1.25}
+.hero-band small{display:block; margin-top:18px; font-size:.7rem; letter-spacing:.32em; text-transform:uppercase; opacity:.7}
+
+/* marquee */
+.marquee{border-block:1px solid var(--line); overflow:hidden; padding:20px 0; margin-top:74px; background:var(--paper)}
+.marquee-track{display:flex; gap:52px; width:max-content; animation:slide 34s linear infinite; will-change:transform}
+.marquee-track.dur{animation-play-state:paused}
+.marquee span{font-family:"Cormorant Garamond",serif; font-size:1.55rem; font-style:italic; color:var(--muted); white-space:nowrap; display:flex; align-items:center; gap:52px}
+.marquee span::after{content:"✦"; font-size:.7rem; color:var(--bronze); font-style:normal}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+section{padding:104px 0}
+.head{max-width:600px; margin-bottom:56px}
+.head h2{margin:18px 0 20px}
+.head.center{margin-inline:auto; text-align:center}
+
+/* hizmet listesi */
+.menu-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 68px}
+.srv{display:flex; gap:20px; align-items:baseline; padding:24px 0; border-bottom:1px solid var(--line)}
+.srv-main{flex:1; min-width:0}
+.srv h3{margin-bottom:4px}
+.srv p{font-size:.9rem; color:var(--muted); line-height:1.55}
+.srv .dots{flex:1; border-bottom:1px dotted rgba(36,28,24,.28); min-width:16px; transform:translateY(-4px)}
+.srv .price{font-family:"Cormorant Garamond",serif; font-size:1.5rem; color:var(--bronze); white-space:nowrap}
+.srv .price small{font-family:Jost,sans-serif; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:block; text-align:right; margin-top:-4px}
+
+/* iki sütun anlatım */
+.about{background:var(--paper); border-block:1px solid var(--line)}
+.about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:76px; align-items:center}
+.frame{
+  aspect-ratio:4/5; border:1px solid var(--line); border-radius:2px; position:relative; overflow:hidden;
+  background:linear-gradient(160deg,var(--blush),var(--sand) 50%,#dcc9bb);
+  display:grid; place-items:center;
+}
+.frame::after{content:""; position:absolute; inset:14px; border:1px solid rgba(255,255,255,.5)}
+.frame .display{font-size:clamp(2.4rem,5vw,3.6rem); font-style:italic; color:rgba(36,28,24,.42); text-align:center; line-height:1.15; padding:20px}
+.numbers{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; margin-top:44px; padding-top:34px; border-top:1px solid var(--line)}
+.numbers b{display:block; font-family:"Cormorant Garamond",serif; font-size:2.6rem; font-weight:400; line-height:1; color:var(--bronze)}
+.numbers span{font-size:.78rem; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; display:block; margin-top:8px}
+
+/* --- fotograf blogu --- */
+.hero-band{background-image:
+    linear-gradient(180deg, rgba(36,28,24,.62), rgba(36,28,24,.72)),
+    url("gorseller/salon-serit.jpg");
+  background-size:cover; background-position:center 62%;
+}
+.frame{padding:0; background:var(--sand)}
+.frame img{width:100%; height:100%; object-fit:cover; display:block}
+.portrait{background:var(--espresso)}
+.portrait img{width:100%; height:100%; object-fit:cover; display:block}
+
+/* --- form: yazili hata --- */
+.field .hata{display:none; font-size:.75rem; color:#a33b2c; margin-top:6px; letter-spacing:.02em}
+.field.bozuk .hata{display:block}
+.field.bozuk input,.field.bozuk select,.field.bozuk textarea{border-bottom-color:#a33b2c}
+.onay{display:flex; gap:11px; align-items:flex-start; margin:6px 0 20px; font-size:.79rem; color:var(--muted); line-height:1.55}
+.onay input{width:16px; height:16px; flex:none; margin-top:2px; accent-color:var(--bronze)}
+.onay a{color:var(--bronze); text-decoration:underline; text-underline-offset:2px}
+.onay.bozuk{color:#a33b2c}
+.veri-uyari{font-size:.75rem; color:var(--muted); background:var(--sand); padding:10px 13px; margin:-4px 0 20px; line-height:1.55; border-radius:2px}
+.f-legal{display:flex; gap:16px; flex-wrap:wrap}
+.f-legal a{text-decoration:underline; text-underline-offset:3px}
+
+/* ekip */
+.team{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px}
+.person{text-align:center}
+.portrait{
+  aspect-ratio:3/4; border-radius:2px; margin-bottom:18px; position:relative; overflow:hidden;
+  background:linear-gradient(165deg,var(--sand),var(--blush)); display:grid; place-items:center;
+  transition:transform .45s cubic-bezier(.2,.7,.3,1);
+}
+.person:hover .portrait{transform:translateY(-6px)}
+.portrait span{font-family:"Cormorant Garamond",serif; font-size:2.8rem; color:rgba(36,28,24,.35)}
+.person b{display:block; font-weight:500; font-size:1rem}
+.person small{color:var(--bronze); font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; display:block; margin-top:5px}
+
+/* kampanya bandı */
+.promo{background:var(--espresso); color:var(--cream); text-align:center; padding:96px 0}
+.promo h2{color:var(--cream); margin:20px auto 22px; max-width:16ch}
+.promo .lead{color:rgba(248,243,238,.66); margin-inline:auto; text-align:center}
+.promo .btn{margin-top:34px}
+.promo .kicker{color:var(--blush)}
+
+/* yorumlar */
+.reviews{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:34px}
+.review{padding-top:26px; border-top:1px solid var(--line)}
+.review .stars{color:var(--bronze); letter-spacing:3px; font-size:.8rem; margin-bottom:16px}
+.review p{font-family:"Cormorant Garamond",serif; font-size:1.35rem; line-height:1.45; font-style:italic; margin-bottom:20px}
+.review b{font-weight:500; font-size:.92rem; display:block}
+.review small{color:var(--muted); font-size:.78rem; letter-spacing:.1em; text-transform:uppercase}
+
+/* randevu */
+.booking{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:72px; align-items:start}
+.info-line{display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--line); align-items:flex-start}
+.info-line svg{flex:none; margin-top:5px; color:var(--bronze)}
+.info-line b{display:block; font-weight:500}
+.info-line span{color:var(--muted); font-size:.88rem}
+form{background:var(--paper); border:1px solid var(--line); padding:38px}
+.field{margin-bottom:20px}
+.field label{display:block; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:9px}
+.field input,.field select,.field textarea{
+  width:100%; padding:12px 0; border:0; border-bottom:1px solid var(--line); background:transparent;
+  font:inherit; font-size:.98rem; color:var(--espresso); border-radius:0; transition:border-color .3s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none; border-bottom-color:var(--bronze)}
+.field textarea{resize:vertical; min-height:76px}
+.row2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px}
+form .btn{width:100%; justify-content:center; margin-top:10px}
+.form-note{font-size:.74rem; color:var(--muted); text-align:center; margin-top:16px; letter-spacing:.04em}
+.form-ok{display:none; text-align:center; padding:36px 6px}
+.form-ok.show{display:block}
+.form-ok .display{font-size:2rem; font-style:italic; margin-bottom:14px}
+.form-ok p{color:var(--muted); font-size:.95rem}
+
+/* footer */
+footer.site{background:var(--paper); border-top:1px solid var(--line); padding:74px 0 32px}
+.f-grid{display:grid; grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr)); gap:44px}
+footer.site h4{font-size:.68rem; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; font-weight:500}
+footer.site ul{list-style:none; padding:0; margin:0; display:grid; gap:12px; font-size:.93rem}
+footer.site a:hover{color:var(--bronze)}
+.f-bottom{margin-top:56px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:.78rem; color:var(--muted)}
+.demo-badge{border:1px solid var(--line); border-radius:999px; padding:5px 15px; font-size:.72rem}
+
+.wa{
+  position:fixed; right:22px; bottom:22px; z-index:70; width:56px; height:56px; border-radius:50%;
+  background:var(--espresso); color:var(--cream); display:grid; place-items:center;
+  box-shadow:0 12px 30px rgba(36,28,24,.28); transition:transform .3s, background .3s;
+}
+.wa:hover{transform:scale(1.08); background:var(--bronze)}
+
+html.js .reveal{opacity:0; transform:translateY(26px); transition:opacity .8s cubic-bezier(.2,.7,.3,1), transform .8s cubic-bezier(.2,.7,.3,1)}
+html.js .reveal.in{opacity:1; transform:none}
+
+@media (max-width:1000px){
+  .hero-top,.about-grid,.booking{grid-template-columns:minmax(0,1fr); gap:40px}
+  .hero-meta{padding-bottom:0}
+  .menu-grid{grid-template-columns:minmax(0,1fr); gap:0}
+  .team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reviews{grid-template-columns:minmax(0,1fr); gap:26px}
+  .f-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav-links,.nav-right .btn{display:none}
+  .burger{display:flex}
+  .frame{aspect-ratio:16/11}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  section{padding:72px 0}
+  .hero{padding-top:44px}
+  .hero-band{height:250px; margin-top:44px}
+  .numbers{grid-template-columns:minmax(0,1fr); gap:22px; text-align:left}
+  .team,.f-grid,.row2{grid-template-columns:minmax(0,1fr)}
+  form{padding:28px 22px}
+  .srv{gap:14px}
+  .srv .dots{display:none}
+  .marquee{margin-top:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important; scroll-behavior:auto !important}
+  html.js .reveal{opacity:1 !important; transform:none !important}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="logo" href="#">Nuar<small>Atelier de Beauté</small></a>
+      <div class="nav-links">
+        <a href="#hizmetler">Hizmetler</a>
+        <a href="#hakkimizda">Salon</a>
+        <a href="#ekip">Ekip</a>
+        <a href="#yorumlar">Yorumlar</a>
+      </div>
+      <div class="nav-right">
+        <a class="btn btn-outline" href="#randevu">Randevu</a>
+        <button class="burger" id="burger" aria-label="Menü" aria-expanded="false"><div></div></button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#hizmetler">Hizmetler</a>
+      <a href="#hakkimizda">Salon</a>
+      <a href="#ekip">Ekip</a>
+      <a href="#yorumlar">Yorumlar</a>
+      <a data-isletme="telefon-link" href="tel:+902129994108"><span data-isletme="telefon">0212 999 41 08</span></a>
+      <a class="btn" href="#randevu">Randevu Al</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="kicker">Bebek, İstanbul · 2014'ten beri</div>
+        <h1 style="margin:26px 0 0">Kendinize<br>ayırdığınız<br><em>o iki saat.</em></h1>
+      </div>
+      <div class="hero-meta">
+        <p class="lead">Atelier Nuar bir güzellik salonundan fazlası. Cilt bakımından kalıcı makyaja, tırnak tasarımından lazer epilasyona kadar her uygulama tek uzman tarafından, randevunuza özel ayrılmış kabinde yapılır.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#randevu">Randevu oluştur</a>
+          <a class="btn btn-outline" href="#hizmetler">Fiyat listesi</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-band">
+      <div>
+        <div class="display">"Aceleye getirilmeyen bakım, bakımdan fazlasıdır."</div>
+        <small>Atelier Nuar · Bebek</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Cilt Bakımı</span><span>Kalıcı Makyaj</span><span>Lazer Epilasyon</span><span>Kirpik Tasarımı</span><span>Manikür &amp; Pedikür</span><span>Gelin Paketi</span>
+    <span>Cilt Bakımı</span><span>Kalıcı Makyaj</span><span>Lazer Epilasyon</span><span>Kirpik Tasarımı</span><span>Manikür &amp; Pedikür</span><span>Gelin Paketi</span>
+  </div>
+</div>
+
+<section id="hizmetler">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Hizmetler ve Fiyatlar</div>
+      <h2>Her şey açık, sürpriz yok</h2>
+      <p class="lead">Fiyatlarımız ilk randevudan önce buradan görülebilir. Uygulama sırasında ek ürün, ek seans dayatması yapmayız.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="srv reveal"><div class="srv-main"><h3>Klasik Cilt Bakımı</h3><p>Derin temizlik, peeling, maske ve nemlendirme. 60 dakika.</p></div><span class="dots"></span><span class="price">1.400 ₺<small>seans</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Hydrafacial Bakım</h3><p>Vakum destekli derin temizlik ve serum uygulaması. 75 dakika.</p></div><span class="dots"></span><span class="price">2.600 ₺<small>seans</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Kalıcı Makyaj — Kaş</h3><p>Pudra ya da kıl tekniği. Rötuş dahildir. 2 saat.</p></div><span class="dots"></span><span class="price">4.900 ₺<small>uygulama</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Kirpik Lifting</h3><p>Kendi kirpiğinizle kalıcı kıvrım, 6 ile 8 hafta kalıcı. 50 dakika.</p></div><span class="dots"></span><span class="price">1.100 ₺<small>uygulama</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Lazer Epilasyon — Tüm Vücut</h3><p>Buz başlıklı alexandrite cihaz, acısız uygulama. Seans başı.</p></div><span class="dots"></span><span class="price">3.200 ₺<small>seans</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Manikür &amp; Kalıcı Oje</h3><p>Bakım, şekillendirme ve kalıcı oje uygulaması. 70 dakika.</p></div><span class="dots"></span><span class="price">900 ₺<small>uygulama</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Protez Tırnak</h3><p>Jel ya da akrilik, tasarım dahil. 100 dakika.</p></div><span class="dots"></span><span class="price">1.600 ₺<small>uygulama</small></span></div>
+      <div class="srv reveal"><div class="srv-main"><h3>Gelin Paketi</h3><p>Deneme makyajı, cilt hazırlığı, gün makyajı ve saç. Kişiye özel planlanır.</p></div><span class="dots"></span><span class="price">Teklif<small>görüşerek</small></span></div>
+    </div>
+    <p class="lead" style="margin-top:34px; font-size:.86rem">Fiyatlar 2026 yılı için geçerlidir. Paket alımlarında ve öğrenci indiriminde ayrı fiyat uygulanır.</p>
+  </div>
+</section>
+
+<section id="hakkimizda" class="about">
+  <div class="wrap about-grid">
+    <figure class="frame reveal" style="margin:0">
+          <img src="gorseller/salon-mekan.jpg" width="760" height="950" loading="lazy" decoding="async"
+               alt="Atelier Nuar salonunun iç mekânı: aynalı çalışma alanı ve mermer zemin">
+        </figure>
+    <div class="reveal">
+      <div class="kicker">Salon</div>
+      <h2 style="margin:18px 0 22px">Sıra bekleyen değil,<br>beklenen misafir</h2>
+      <p class="lead">2014'te iki kişilik bir kabinde başladık. Bugün altı uzmanla çalışıyoruz ama kuralımız değişmedi: aynı saatte yalnızca bir misafir. Randevunuz sizin, kimseyle paylaşmıyorsunuz.</p>
+      <p class="lead" style="margin-top:20px">Kullandığımız bütün ürünlerin içeriğini uygulama öncesinde gösteriyoruz. Hassas cilt, hamilelik ve alerji durumlarında ürün değişimi ek ücretsizdir.</p>
+      <div class="numbers">
+        <div><b>12</b><span>yıllık salon</span></div>
+        <div><b>6</b><span>uzman</span></div>
+        <div><b>4.800</b><span>düzenli misafir</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ekip">
+  <div class="wrap">
+    <div class="head center reveal">
+      <div class="kicker" style="letter-spacing:.34em">Ekip</div>
+      <h2>Sizinle ilgilenecek kişiler</h2>
+      <p class="lead" style="margin-inline:auto">Randevu alırken uzmanınızı da seçebilirsiniz. Her uygulamayı baştan sona aynı kişi yürütür.</p>
+    </div>
+    <div class="team">
+      <div class="person reveal"><div class="portrait"><img src="gorseller/ekip-nur.jpg" width="560" height="747" loading="lazy" decoding="async" alt="Nur Aydın, kurucu ve cilt bakımı uzmanı"></div><b>Nur Aydın</b><small>Kurucu · Cilt Bakımı</small></div>
+      <div class="person reveal"><div class="portrait"><img src="gorseller/ekip-selin.jpg" width="560" height="747" loading="lazy" decoding="async" alt="Selin Bayraktar, kalıcı makyaj uzmanı"></div><b>Selin Bayraktar</b><small>Kalıcı Makyaj</small></div>
+      <div class="person reveal"><div class="portrait"><img src="gorseller/ekip-deniz.jpg" width="560" height="747" loading="lazy" decoding="async" alt="Deniz Öztürk, lazer uygulama uzmanı"></div><b>Deniz Öztürk</b><small>Lazer Uygulama</small></div>
+      <div class="person reveal"><div class="portrait"><img src="gorseller/ekip-melis.jpg" width="560" height="747" loading="lazy" decoding="async" alt="Melis Günay, tırnak tasarımı uzmanı"></div><b>Melis Günay</b><small>Tırnak Tasarımı</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="promo">
+  <div class="wrap">
+    <div class="kicker">Yeni misafirlere özel</div>
+    <h2>İlk cilt analizi ücretsiz</h2>
+    <p class="lead">Cihazla cilt analizi yapıyor, size uygun bakım planını yazılı olarak veriyoruz. Uygulama almasanız bile plan sizde kalır.</p>
+    <a class="btn btn-light" href="#randevu">Analiz randevusu al</a>
+  </div>
+</section>
+
+<section id="yorumlar">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="kicker">Misafirlerimiz</div>
+      <h2>Ne söylüyorlar</h2>
+    </div>
+    <div class="reviews">
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Randevu saatimde içeri girdim, saatimde çıktım. Bunu İstanbul'da başka hiçbir salonda yaşamadım."</p>
+        <b>Elif D.</b><small>Hydrafacial bakım</small>
+      </div>
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Kaşlarımı üç yıl sonra yaptırmaya cesaret ettim. Sonuç doğal, kimse fark etmedi, herkes iyi göründüğümü söyledi."</p>
+        <b>Buse K.</b><small>Kalıcı makyaj</small>
+      </div>
+      <div class="review reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Hamileyken kullanılan ürünleri tek tek gösterdiler ve değiştirdiler. Bu özeni hiçbir yerde görmedim."</p>
+        <b>Ceren A.</b><small>Cilt bakımı</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="randevu" class="about" style="border-bottom:0">
+  <div class="wrap booking">
+    <div class="reveal">
+      <div class="kicker">Randevu</div>
+      <h2 style="margin:18px 0 22px">Sizi bekliyoruz</h2>
+      <p class="lead">Formu doldurun, uygun saatleri WhatsApp'tan gönderelim. Dilerseniz doğrudan arayabilir ya da salona uğrayabilirsiniz.</p>
+      <div style="margin-top:34px">
+        <div class="info-line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><b data-isletme="adres">Cevdetpaşa Caddesi No: 24, Bebek</b><span>Beşiktaş, İstanbul</span></div>
+        </div>
+        <div class="info-line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+          <div><b data-isletme="telefon">0212 999 41 08</b><span>WhatsApp hattı da aynı numaradır</span></div>
+        </div>
+        <div class="info-line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <div><b>Salı - Cumartesi 10.00 - 20.00</b><span>Pazar ve pazartesi kapalı</span></div>
+        </div>
+      </div>
+    </div>
+
+    <form id="bkForm" class="reveal" novalidate>
+      <div id="formFields">
+        <div class="row2">
+          <div class="field" id="f-ad"><label for="ad">Adınız</label><input id="ad" type="text" placeholder="Elif Demir" autocomplete="name" required aria-describedby="h-ad"><span class="hata" id="h-ad">Lütfen adınızı yazın.</span></div>
+          <div class="field" id="f-tel"><label for="tel">Telefon</label><input id="tel" type="tel" placeholder="0 (5__) ___ __ __" inputmode="numeric" autocomplete="tel" maxlength="19" required aria-describedby="h-tel"><span class="hata" id="h-tel">Cep telefonunuzu 0 ile başlayarak 11 hane yazın.</span></div>
+        </div>
+        <div class="field">
+          <label for="hizmet">Hizmet</label>
+          <select id="hizmet">
+            <option>Cilt bakımı</option>
+            <option>Hydrafacial</option>
+            <option>Kalıcı makyaj</option>
+            <option>Kirpik lifting</option>
+            <option>Lazer epilasyon</option>
+            <option>Manikür / protez tırnak</option>
+            <option>Gelin paketi</option>
+          </select>
+        </div>
+        <div class="row2">
+          <div class="field" id="f-tarih"><label for="tarih">Tercih ettiğiniz gün</label><input id="tarih" type="date"><span class="hata" id="h-tarih">Geçmiş bir gün seçilemez.</span></div>
+          <div class="field">
+            <label for="saat">Saat aralığı</label>
+            <select id="saat"><option>10.00 - 13.00</option><option>13.00 - 16.00</option><option>16.00 - 20.00</option></select>
+          </div>
+        </div>
+        <div class="field"><label for="not">Notunuz <span style="text-transform:none; letter-spacing:0">(isteğe bağlı)</span></label><textarea id="not" placeholder="Bize iletmek istediğiniz bir konu varsa yazabilirsiniz."></textarea></div>
+        <p class="veri-uyari">Alerji ve hassasiyet bilgisi sağlık verisidir. Lütfen bu alana yazmayın, uygulama öncesi uzmanınıza sözlü olarak iletin.</p>
+
+        <label class="onay" id="f-kvkk">
+          <input type="checkbox" id="kvkk" required>
+          <span><a href="#kvkk-metni">KVKK Aydınlatma Metni</a>'ni okudum. Randevu talebimin değerlendirilmesi için bilgilerimin işlenmesini kabul ediyorum.</span>
+        </label>
+
+        <button class="btn" type="submit">Randevu talebi gönder</button>
+        <p class="form-note">Bilgileriniz yalnızca randevu talebiniz için kullanılır.</p>
+      </div>
+      <div class="form-ok" id="formOk">
+        <div class="display">Teşekkürler</div>
+        <p><b>Bu bir kesin randevu değildir.</b> Talebiniz bize ulaştı, uygun saatleri kısa süre içinde WhatsApp üzerinden göndereceğiz. Acele bir durumsa <span data-isletme="telefon">0212 999 41 08</span> numarasından ulaşabilirsiniz.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="yasal" class="about" style="padding-bottom:80px">
+  <div class="wrap" style="max-width:820px">
+    <div class="head center reveal">
+      <div class="kicker" style="letter-spacing:.34em">Yasal bilgiler</div>
+      <h2>Kişisel verileriniz</h2>
+    </div>
+    <div class="reveal">
+      <details id="kvkk-metni">
+        <summary>KVKK Aydınlatma Metni</summary>
+        <p><b>Veri sorumlusu.</b> <span data-isletme="ad">Atelier Nuar</span>, <span data-isletme="adres">Cevdetpaşa Caddesi No: 24, Bebek</span>. İletişim: <span data-isletme="eposta">merhaba@ateliernuar.com</span>, <span data-isletme="telefon">0212 999 41 08</span>.</p>
+        <p><b>Hangi veriler işlenir.</b> Randevu formu üzerinden adınız, telefon numaranız, seçtiğiniz hizmet, tercih ettiğiniz gün ve saat aralığı. Not alanına kendi isteğinizle yazdığınız bilgiler. Alerji ve cilt hassasiyeti gibi bilgiler sağlık verisi sayılır ve özel nitelikli kişisel veridir; bu nedenle bunları forma yazmamanızı, uygulama öncesinde uzmanınıza sözlü olarak iletmenizi öneririz.</p>
+        <p><b>İşleme amacı.</b> Randevu talebinizin alınması, size dönüş yapılması ve randevunuzun planlanması. Başka bir amaçla kullanılmaz.</p>
+        <p><b>Hukuki sebep.</b> Randevu iletişimi için meşru menfaat ve talebiniz üzerine yürütülen ön görüşme; sağlık verisi niteliğindeki bilgiler bakımından açık rızanız.</p>
+        <p><b>Toplama yöntemi.</b> Bu internet sitesindeki randevu formu aracılığıyla, elektronik ortamda.</p>
+        <p><b>Aktarım.</b> Bilgileriniz üçüncü kişilerle paylaşılmaz. Yalnızca yasal olarak bilgi talep etmeye yetkili kamu kurumlarına, mevzuatın zorunlu kıldığı hallerde aktarılabilir.</p>
+        <p><b>Saklama süresi.</b> Randevu talepleri, talebin sonuçlanmasından itibaren 12 ay saklanır, sürenin sonunda silinir.</p>
+        <p><b>Haklarınız.</b> KVKK'nın 11. maddesi uyarınca; verilerinizin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltilmesini veya silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Taleplerinizi yukarıdaki iletişim bilgilerinden iletebilirsiniz.</p>
+      </details>
+      <details id="gizlilik">
+        <summary>Gizlilik Politikası</summary>
+        <p>Bu sitede paylaştığınız bilgiler yalnızca sizinle iletişim kurmak için kullanılır. Reklam ve pazarlama amacıyla kullanılmaz, satılmaz, kiralanmaz. Form gönderimleri şifreli bağlantı (HTTPS) üzerinden iletilir.</p>
+        <p>Sosyal medya hesaplarımıza veya harita hizmetlerine giden bağlantılara tıkladığınızda ilgili hizmetin kendi gizlilik koşulları geçerli olur.</p>
+      </details>
+      <details id="cerez">
+        <summary>Çerez Politikası</summary>
+        <p>Bu sitede reklam veya takip çerezi kullanılmaz. Yalnızca sayfanın düzgün çalışması için gereken zorunlu çerezler kullanılabilir. Tarayıcı ayarlarınızdan çerezleri istediğiniz zaman silebilirsiniz.</p>
+      </details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a class="logo" href="#">Nuar<small>Atelier de Beauté</small></a>
+        <p class="lead" style="margin-top:22px; font-size:.93rem">Bebek'te 12 yıldır aynı yerde. Tek misafir, tek uzman, ayrılmış zaman.</p>
+      </div>
+      <div>
+        <h4>Hizmetler</h4>
+        <ul>
+          <li><a href="#hizmetler">Cilt bakımı</a></li>
+          <li><a href="#hizmetler">Kalıcı makyaj</a></li>
+          <li><a href="#hizmetler">Lazer epilasyon</a></li>
+          <li><a href="#hizmetler">Tırnak tasarımı</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salon</h4>
+        <ul>
+          <li><a href="#hakkimizda">Hakkımızda</a></li>
+          <li><a href="#ekip">Ekibimiz</a></li>
+          <li><a href="#yorumlar">Yorumlar</a></li>
+          <li><a href="#randevu">Randevu</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <ul>
+          <li><a data-isletme="telefon-link" href="tel:+902129994108"><span data-isletme="telefon">0212 999 41 08</span></a></li>
+          <li><a data-isletme="eposta-link" href="mailto:merhaba@ateliernuar.com"><span data-isletme="eposta">merhaba@ateliernuar.com</span></a></li>
+          <li><span data-isletme="adres">Cevdetpaşa Caddesi No: 24, Bebek</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 <span data-isletme="ad">Atelier Nuar</span></span>
+      <div class="f-legal">
+        <a href="#kvkk-metni">KVKK Aydınlatma Metni</a>
+        <a href="#gizlilik">Gizlilik</a>
+        <a href="#cerez">Çerezler</a>
+      </div>
+      <span>Son güncelleme: 30 Ağustos 2026</span>
+      <span class="demo-badge">Bu sayfa bir tanıtım demosudur. Salon, kişi, fiyat ve iletişim bilgileri gerçek değildir.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa" href="#randevu" aria-label="WhatsApp ile yazın">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6l.5-.5c.1-.2.2-.3.3-.5 0-.2 0-.4 0-.5 0-.2-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 2.9 4.6 4 .6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3M12 21.5c-1.7 0-3.3-.4-4.7-1.3l-.3-.2-3.5.9.9-3.4-.2-.4c-.9-1.5-1.4-3.2-1.4-4.9C2.8 7.1 6.9 3 12 3s9.2 4.1 9.2 9.2-4.1 9.3-9.2 9.3M12 1C5.9 1 .9 6 .9 12.1c0 2 .5 3.9 1.5 5.6L.8 23.2l5.7-1.5c1.6.9 3.5 1.4 5.5 1.4 6.1 0 11.1-5 11.1-11.1S18.1 1 12 1"/></svg>
+</a>
+
+<script>
+/* ===================== TOPLANTI ÖNCESİ BURAYI DEĞİŞTİR =====================
+   Aşağıdaki satırları müşterinin kendi bilgileriyle değiştirin, site onun
+   salonu olur. Sayfanın başka hiçbir yerine dokunmanız gerekmez.
+   Telefon 0212 999 aralığı İstanbul'da tahsis edilmiyor, kimse aranmaz.
+   Yayına alırken <title>, açıklama ve og: etiketlerini de güncelleyin.     */
+const ISLETME = {
+  ad:      'Atelier Nuar',
+  telefon: '0212 999 41 08',
+  adres:   'Cevdetpaşa Caddesi No: 24, Bebek',
+  eposta:  'merhaba@ateliernuar.com',
+};
+/* =================== DEĞİŞTİRİLECEK KISIM BURADA BİTTİ =================== */
+
+(function ayarlariUygula(){
+  const yaz = (a,d) => document.querySelectorAll('[data-isletme="'+a+'"]').forEach(e => e.textContent = d);
+  yaz('ad', ISLETME.ad); yaz('telefon', ISLETME.telefon);
+  yaz('adres', ISLETME.adres); yaz('eposta', ISLETME.eposta);
+  const rakam = ISLETME.telefon.replace(/\D/g,'');
+  document.querySelectorAll('[data-isletme="telefon-link"]').forEach(a => a.href = 'tel:+9' + rakam);
+  document.querySelectorAll('[data-isletme="eposta-link"]').forEach(a => a.href = 'mailto:' + ISLETME.eposta);
+})();
+
+document.documentElement.lang = 'tr';
+document.documentElement.classList.add('js');
+
+const hdr = document.getElementById('hdr');
+const onScroll = () => hdr.classList.toggle('stuck', window.scrollY > 8);
+onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+const burger = document.getElementById('burger');
+const menu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => {
+  const open = menu.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menu.classList.remove('open'); burger.setAttribute('aria-expanded','false');
+}));
+
+// gorunurluk animasyonu (kaydirmaya bagli, her durumda calisir)
+const revs = [...document.querySelectorAll('.reveal')];
+revs.forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; });
+let tick = false;
+function revCheck(){
+  tick = false;
+  const h = window.innerHeight;
+  for (let i = revs.length - 1; i >= 0; i--) {
+    if (revs[i].getBoundingClientRect().top < h - 40) { revs[i].classList.add('in'); revs.splice(i, 1); }
+  }
+}
+function revTick(){ if (!tick) { tick = true; requestAnimationFrame(revCheck); } }
+revCheck();
+window.addEventListener('scroll', revTick, {passive:true});
+window.addEventListener('resize', revTick);
+window.addEventListener('load', revCheck);
+
+// kayan serit: ekranda degilken ya da sekme arkadayken dursun (pil ve islemci icin)
+const serit = document.querySelector('.marquee-track');
+if (serit) {
+  let goruniyor = true;
+  const seritDurum = () => serit.classList.toggle('dur', !goruniyor || document.hidden);
+  new IntersectionObserver(([e]) => { goruniyor = e.isIntersecting; seritDurum(); }, {threshold:0})
+    .observe(serit.parentElement);
+  document.addEventListener('visibilitychange', seritDurum);
+  seritDurum();
+}
+
+/* ---- randevu formu ---- */
+const form = document.getElementById('bkForm');
+const alan = { ad: document.getElementById('ad'), tel: document.getElementById('tel'),
+               tarih: document.getElementById('tarih'), kvkk: document.getElementById('kvkk') };
+
+/* Geçmiş bir gün seçilemesin */
+alan.tarih.min = new Date().toISOString().slice(0,10);
+
+/* Telefon maskesi: 0 (5XX) XXX XX XX */
+function telBicimle(ham){
+  let r = ham.replace(/\D/g,'');
+  if (r.startsWith('90')) r = r.slice(2);
+  if (!r.startsWith('0')) r = '0' + r;
+  r = r.slice(0,11);
+  if (r.length <= 1) return r;
+  let c = r[0] + ' (' + r.slice(1,4);
+  if (r.length >= 4) c += ')';
+  if (r.length > 4)  c += ' ' + r.slice(4,7);
+  if (r.length > 7)  c += ' ' + r.slice(7,9);
+  if (r.length > 9)  c += ' ' + r.slice(9,11);
+  return c;
+}
+alan.tel.addEventListener('input', e => { e.target.value = telBicimle(e.target.value); });
+const telGecerli = v => /^0\s?\(5\d{2}\)\s?\d{3}\s?\d{2}\s?\d{2}$/.test(v.trim());
+
+['ad','tel','tarih'].forEach(k => alan[k].addEventListener('input',
+  () => document.getElementById('f-'+k).classList.remove('bozuk')));
+alan.kvkk.addEventListener('change',
+  () => document.getElementById('f-kvkk').classList.remove('bozuk'));
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const bugun = new Date().toISOString().slice(0,10);
+  const kontroller = [
+    ['f-ad',    !alan.ad.value.trim(),                          alan.ad],
+    ['f-tel',   !telGecerli(alan.tel.value),                    alan.tel],
+    ['f-tarih', !!alan.tarih.value && alan.tarih.value < bugun, alan.tarih],
+    ['f-kvkk',  !alan.kvkk.checked,                             alan.kvkk],
+  ];
+  let ilkHata = null;
+  kontroller.forEach(([kutu, bozuk, oge]) => {
+    document.getElementById(kutu).classList.toggle('bozuk', bozuk);
+    if (bozuk && !ilkHata) ilkHata = oge;
+  });
+  if (ilkHata){ ilkHata.focus(); return; }
+
+  document.getElementById('formFields').style.display = 'none';
+  document.getElementById('formOk').classList.add('show');
+  document.getElementById('formOk').scrollIntoView({block:'center', behavior:'smooth'});
+});
+</script>
+</body>
+</html>
