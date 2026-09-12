@@ -1219,11 +1219,11 @@ body.balon-acik{overflow:hidden}
           <span class="k-et">Telefon</span>
           <span class="k-de" data-marka="telefon">0___ ___ __ __</span>
         </a>
-        <a class="kanal" data-marka="eposta-link" href="#">
+        <a class="kanal" data-marka="eposta-link" data-gerekli="eposta" href="#">
           <span class="k-et">E-posta</span>
           <span class="k-de" data-marka="eposta">merhaba@sarmaldijital.com</span>
         </a>
-        <a class="kanal" data-marka="ig-link" href="#" target="_blank" rel="noopener">
+        <a class="kanal" data-marka="ig-link" data-gerekli="instagram" href="#" target="_blank" rel="noopener">
           <span class="k-et">Instagram</span>
           <span class="k-de" data-marka="instagram">@sarmaldijital</span>
         </a>
@@ -1492,7 +1492,7 @@ body.balon-acik{overflow:hidden}
   <div class="wrap f-dev-marka">
     <div class="f-dev-baglar">
       <a data-marka="wa-link" href="#" target="_blank" rel="noopener">WhatsApp</a>
-      <a data-marka="eposta-link" href="#">E-posta</a>
+      <a data-marka="eposta-link" data-gerekli="eposta" href="#">E-posta</a>
       <a href="#iletisim">Talep formu</a>
       <a href="#fiyat">Fiyatlar</a>
     </div>
@@ -1554,6 +1554,13 @@ document.documentElement.classList.add('js');
     bagla('tel-link', 'tel:+' + waNumara());
     bagla('wa-link', 'https://wa.me/' + waNumara() + '?text=' + encodeURIComponent(MARKA.waMesaj));
   }
+  /* Bilgisi girilmemis kanal sayfada gorunmez. Yoksa HTML'deki ornek
+     deger (merhaba@sarmaldijital.com gibi) gercekmis gibi duruyor ve
+     musteri olmayan bir adrese yaziyor. */
+  document.querySelectorAll('[data-gerekli]').forEach(oge => {
+    if (!MARKA[oge.dataset.gerekli]) oge.remove();
+  });
+
   if (MARKA.eposta)    bagla('eposta-link', 'mailto:' + MARKA.eposta);
   if (MARKA.instagram) bagla('ig-link', 'https://instagram.com/' + MARKA.instagram);
 })();

@@ -1,4 +1,4 @@
-# İletişim bilgileri tamamlanana kadar arama motorlarına kapalı.
-# E-posta ve Instagram girilince bu dosya silinecek.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://erentalha24.github.io/sarmal-yayin/sitemap.xml
