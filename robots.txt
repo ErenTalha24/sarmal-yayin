@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://erentalha24.github.io/sarmal-yayin/sitemap.xml
+Sitemap: https://sarmaldijital.com/sitemap.xml
